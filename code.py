@@ -10,10 +10,10 @@ import fourwire
 import time
 
 from digitalio import DigitalInOut, Direction, Pull
-#
-import rotaryio
-from cards import *
 
+import rotaryio
+
+from cards import *
 import pokerlib
 
 # Initialize poker calculator
@@ -51,8 +51,6 @@ color_palette[0] = 0x000000  # Black background
 
 bg_sprite = displayio.TileGrid(color_bitmap, pixel_shader=color_palette, x=0, y=0)
 splash.append(bg_sprite)
-
-
 
 # Create title at the top
 title_group = displayio.Group(scale=1, x=50, y=10)
@@ -145,8 +143,6 @@ for i in range(5):
         'rank': river_rank_area
     })
 
-num = 0
-
 # Flashing function
 def make_text_flash(label, flash_interval=0.5, visible_color=0xFFFF00, invisible_color=0x000000):
     """
@@ -172,18 +168,31 @@ def make_text_flash(label, flash_interval=0.5, visible_color=0xFFFF00, invisible
     
     return update_flash
 
+flash_interval = 0.2
+
 # Create flashing functions for suit and rank
-update_suit_flash = make_text_flash(suit_area, flash_interval=0.5)
-update_rank_flash = make_text_flash(rank_area, flash_interval=0.5)
-update_suit2_flash = make_text_flash(suit2_area, flash_interval=0.5)
-update_rank2_flash = make_text_flash(rank2_area, flash_interval=0.5)
+update_suit_flash = make_text_flash(suit_area, flash_interval=flash_interval)
+update_rank_flash = make_text_flash(rank_area, flash_interval=flash_interval)
+update_suit2_flash = make_text_flash(suit2_area, flash_interval=flash_interval)
+update_rank2_flash = make_text_flash(rank2_area, flash_interval=flash_interval)
+
 
 # Create flashing functions for river cards
 river_suit_flashes = []
 river_rank_flashes = []
 for i in range(5):
-    river_suit_flashes.append(make_text_flash(river_cards[i]['suit'], flash_interval=0.5, visible_color=0xFFFFFF))
-    river_rank_flashes.append(make_text_flash(river_cards[i]['rank'], flash_interval=0.5, visible_color=0xFFFFFF))
+    river_suit_flashes.append(
+        make_text_flash(river_cards[i]['suit'], 
+                        flash_interval=flash_interval, 
+                        visible_color=0xFFFFFF,
+                        invisible_color=0x000000)
+                    )
+    river_rank_flashes.append(
+        make_text_flash(river_cards[i]['rank'], 
+                        flash_interval=flash_interval, 
+                        visible_color=0xFFFFFF,
+                        invisible_color=0x000000)
+                    )
 
 suit = None
 rank = None
@@ -203,8 +212,57 @@ last_card_index = None
 
 last_btn_state = True  # Track button state for debouncing
 
-while True:
-    # Determine what we're currently selecting
+def stop_other_flashing(current_card_index = None, current_selection = None):
+    """Stop all cards from flashing and set them to their normal colors"""
+    # Always set hand cards to yellow (unless they're currently being selected)
+    if not (current_selection == "suit" and current_card_index == 0):
+        suit_area.color = 0xFFFF00
+    if not (current_selection == "rank" and current_card_index == 0):
+        rank_area.color = 0xFFFF00
+    if not (current_selection == "suit" and current_card_index == 1):
+        suit2_area.color = 0xFFFF00
+    if not (current_selection == "rank" and current_card_index == 1):
+        rank2_area.color = 0xFFFF00
+
+    # Set river cards to white (unless they're currently being selected)
+    for i in range(5):
+        if i != current_card_index:
+            river_cards[i]['suit'].color = 0xFFFFFF
+            river_cards[i]['rank'].color = 0xFFFFFF
+
+def reset_all_cards():
+    """Reset all cards and used_cards set"""
+    global suit, rank, suit2, rank2, river_suits, river_ranks, used_cards
+    
+    # Reset hand cards
+    suit = None
+    rank = None
+    suit2 = None
+    rank2 = None
+    
+    # Reset river cards
+    river_suits = [None] * 5
+    river_ranks = [None] * 5
+    
+    # Clear used cards
+    used_cards.clear()
+    
+    # Reset display text
+    suit_area.text = "_"
+    rank_area.text = "_"
+    suit2_area.text = "_"
+    rank2_area.text = "_"
+    
+    for i in range(5):
+        river_cards[i]['suit'].text = "_"
+        river_cards[i]['rank'].text = "_"
+    
+    # Reset percentage
+    percentage_area.text = "0%"
+    
+    print("All cards reset!")
+
+def determine_current_selection():
     current_selection = None
     current_card_index = None
     
@@ -231,81 +289,49 @@ while True:
                 current_selection = "river_rank"
                 current_card_index = i
                 break
+    return current_selection, current_card_index
+
+while True:
+    # Determine what we're currently selecting
+    current_selection, current_card_index = determine_current_selection()
     
     # Update flashing based on what we're selecting
     if current_selection == "suit" and current_card_index == 0:
         update_suit_flash()
         # Stop all others from flashing
-        rank_area.color = 0xFFFF00
-        suit2_area.color = 0xFFFF00
-        rank2_area.color = 0xFFFF00
-        for i in range(5):
-            river_cards[i]['suit'].color = 0xFFFFFF
-            river_cards[i]['rank'].color = 0xFFFFFF
+        stop_other_flashing(current_card_index, current_selection)
+
     elif current_selection == "rank" and current_card_index == 0:
         update_rank_flash()
         # Stop all others from flashing
-        suit_area.color = 0xFFFF00
-        suit2_area.color = 0xFFFF00
-        rank2_area.color = 0xFFFF00
-        for i in range(5):
-            river_cards[i]['suit'].color = 0xFFFFFF
-            river_cards[i]['rank'].color = 0xFFFFFF
+        stop_other_flashing(current_card_index, current_selection)
+
     elif current_selection == "suit" and current_card_index == 1:
         update_suit2_flash()
         # Stop all others from flashing
-        suit_area.color = 0xFFFF00
-        rank_area.color = 0xFFFF00
-        rank2_area.color = 0xFFFF00
-        for i in range(5):
-            river_cards[i]['suit'].color = 0xFFFFFF
-            river_cards[i]['rank'].color = 0xFFFFFF
+        stop_other_flashing(current_card_index, current_selection)
+
     elif current_selection == "rank" and current_card_index == 1:
         update_rank2_flash()
         # Stop all others from flashing
-        suit_area.color = 0xFFFF00
-        rank_area.color = 0xFFFF00
-        suit2_area.color = 0xFFFF00
-        for i in range(5):
-            river_cards[i]['suit'].color = 0xFFFFFF
-            river_cards[i]['rank'].color = 0xFFFFFF
+        stop_other_flashing(current_card_index, current_selection)
+
     elif current_selection == "river_suit":
         river_suit_flashes[current_card_index]()
         # Stop all others from flashing
-        suit_area.color = 0xFFFF00
-        rank_area.color = 0xFFFF00
-        suit2_area.color = 0xFFFF00
-        rank2_area.color = 0xFFFF00
-        for i in range(5):
-            if i != current_card_index:
-                river_cards[i]['suit'].color = 0xFFFFFF
-                river_cards[i]['rank'].color = 0xFFFFFF
+        stop_other_flashing(current_card_index)
+
     elif current_selection == "river_rank":
         river_rank_flashes[current_card_index]()
         # Stop all others from flashing
-        suit_area.color = 0xFFFF00
-        rank_area.color = 0xFFFF00
-        suit2_area.color = 0xFFFF00
-        rank2_area.color = 0xFFFF00
-        for i in range(5):
-            if i != current_card_index:
-                river_cards[i]['suit'].color = 0xFFFFFF
-                river_cards[i]['rank'].color = 0xFFFFFF
+        stop_other_flashing(current_card_index)
+
     else:
-        # All selected - stop all flashing
-        suit_area.color = 0xFFFF00
-        rank_area.color = 0xFFFF00
-        suit2_area.color = 0xFFFF00
-        rank2_area.color = 0xFFFF00
-        for i in range(5):
-            river_cards[i]['suit'].color = 0xFFFFFF
-            river_cards[i]['rank'].color = 0xFFFFFF
+        stop_other_flashing()
 
     position = encoder.position
     
-    # Check if we've started a new selection
     if (current_selection != last_selection or current_card_index != last_card_index) and current_selection is not None:
-        # Initialize text to first option when starting a new selection
         if current_selection == "suit" and current_card_index == 0:
             suit_area.text = select_suit(position, used_cards)
         elif current_selection == "rank" and current_card_index == 0:
@@ -340,8 +366,11 @@ while True:
     
     # Button handling with debouncing
     current_btn_state = btn.value
-    if last_btn_state and not current_btn_state:  # Button pressed (falling edge)
-        if current_selection == "suit" and current_card_index == 0:
+    if last_btn_state and not current_btn_state:
+        # Check if all cards are selected (reset condition)
+        if current_selection is None:
+            reset_all_cards()
+        elif current_selection == "suit" and current_card_index == 0:
             suit = select_suit(position, used_cards)
             print(f"Card 1 suit set to: {suit}")
         elif current_selection == "rank" and current_card_index == 0:
@@ -355,7 +384,6 @@ while True:
             rank2 = select_rank(position, suit2, used_cards)
             used_cards.add((suit2, rank2))
             print(f"Card 2 rank set to: {rank2}")
-            # Calculate win percentage after completing both hole cards
             calculate_win_percentage()
         elif current_selection == "river_suit":
             river_suits[current_card_index] = select_suit(position, used_cards)
@@ -365,7 +393,7 @@ while True:
             used_cards.add((river_suits[current_card_index], river_ranks[current_card_index]))
             print(f"River card {current_card_index + 1} rank set to: {river_ranks[current_card_index]}")
             # Only calculate after flop (3 cards), turn (4th card), and river (5th card)
-            if current_card_index >= 2:  # After 3rd, 4th, and 5th river cards
+            if current_card_index >= 2: 
                 calculate_win_percentage()
     last_btn_state = current_btn_state
     
