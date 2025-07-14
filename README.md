@@ -1,3 +1,4 @@
+![]()
 This project allows poker players to make more ethical decisions.
 How does this project help a poker player?
 After you submit your hand to the screen, it shows your win probability. But thats not all, after you submit your hand, you can add the community cards and it will change the win probability.
