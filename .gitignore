@@ -1,0 +1,58 @@
+# CircuitPython specific files
+*.pyc
+__pycache__/
+*.mpy
+
+# CircuitPython boot files
+boot_out.txt
+boot.py
+
+# CircuitPython settings
+settings.toml
+
+# CircuitPython libraries (if you want to exclude them)
+lib/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.bak
+*.backup
+
+# CircuitPython serial output
+*.txt
+
+# Python cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment files
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/ 
