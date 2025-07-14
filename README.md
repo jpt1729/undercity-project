@@ -5,13 +5,13 @@ After you submit your hand to the screen, it shows your win probability. But tha
 
 3 of the Biggest Benefits: 
 1. This small-screen device can fit in a pocket without a doubt.
-2. Lag is a thing of the past when using this device.
+2. On device poker simulation engine (check pokerlib.py)!
 3. You can attach it to a card so that opponents do not see this futuristic device
 
-Items:
-- 3d printed Case
-- Orphius Pico
-- 1.8 Inch TFT Display
-- Jumper Cables
-- EC11 Encoder
-- Bread Boards
+BOM:
+- 1x 3d printed Case
+- 1x Orphius Pico
+- 1x 1.8 Inch TFT Display
+- 12x Jumper Cables
+- 1x EC11 Encoder
+- 1x Bread Boards
