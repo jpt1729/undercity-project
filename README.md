@@ -16,6 +16,7 @@ We started off building an entirely different project, but it turned out too dif
 BOM:
 - 1x 3d printed Case
 - 1x Orphius Pico
+- 2x 6.8k Resistor
 - 1x 1.8 Inch TFT Display
 - 12x Jumper Cables
 - 1x EC11 Encoder
