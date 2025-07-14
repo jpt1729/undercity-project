@@ -14,11 +14,13 @@ We started off building an entirely different project, but it turned out too dif
 3. You can attach it to a card so that opponents do not see this futuristic device
 
 BOM:
-- 1x 3d printed Case
-- 1x Orphius Pico
-- Hot Glue
-- 2x 6.8k Resistor
-- 1x 1.8" TFT Display
-- 12x Jumper Cables
-- 1x EC11 Encoder
-- 2x Bread Boards
+| Quantity | Item                |
+|----------|---------------------|
+| 1x       | 3D Printed Case      |
+| 1x       | Orphius Pico         |
+|          | Hot Glue             |
+| 2x       | 6.8k Resistor        |
+| 1x       | 1.8" TFT Display     |
+| 12x      | Jumper Cables        |
+| 1x       | EC11 Encoder         |
+| 2x       | Bread Boards         |
