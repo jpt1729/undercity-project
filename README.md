@@ -19,4 +19,4 @@ BOM:
 - 1x 1.8 Inch TFT Display
 - 12x Jumper Cables
 - 1x EC11 Encoder
-- 1x Bread Boards
+- 2x Bread Boards
