@@ -1,7 +1,10 @@
-![](https://github.com/jpt1729/undercity-project/blob/main/IMG_3537.jpg)
+# The Tell
+
 This project allows poker players to make more ethical decisions.
 How does this project help a poker player?
 After you submit your hand to the screen, it shows your win probability. But thats not all, after you submit your hand, you can add the community cards and it will change the win probability.
+
+![](https://github.com/jpt1729/undercity-project/blob/main/IMG_3537.jpg)
 
 We started off building an entirely different project, but it turned out too difficult (combined with it heavily relying on extremely limited resources [i.e. 3d printer]) and after spending close to 24 hrs on it we decided to pivot to this.
 
