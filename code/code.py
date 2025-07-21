@@ -14,7 +14,7 @@ from digitalio import DigitalInOut, Direction, Pull
 import rotaryio
 
 from cards import *
-import pokerlib
+import pokerlib as pokerlib
 
 # Initialize poker calculator
 poker_calc = pokerlib.PokerCalculator()
