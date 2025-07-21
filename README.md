@@ -13,6 +13,8 @@ We started off building an entirely different project, but it turned out too dif
 2. On device poker simulation engine (check pokerlib.py)!
 3. You can attach it to a card so that opponents do not see this futuristic device
 
+[YouTube Demo Link](https://youtu.be/JN6RQs203o4)
+
 BOM:
 | Quantity | Item                |
 |----------|---------------------|
